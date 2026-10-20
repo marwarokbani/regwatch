@@ -1,0 +1,23 @@
+# Secrets
+.env
+
+# Java / Maven
+backend/target/
+*.class
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Node / Angular (le frontend a aussi son propre .gitignore)
+node_modules/
+
+# IDE / OS
+.github/modernize/
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db

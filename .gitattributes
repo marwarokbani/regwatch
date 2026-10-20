@@ -1,0 +1,5 @@
+* text=auto
+# Scripts exécutés dans des conteneurs Linux : toujours en LF.
+*.sh text eol=lf
+mvnw text eol=lf
+*.cmd text eol=crlf
