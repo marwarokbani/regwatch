@@ -1,0 +1,66 @@
+spring:
+  application:
+    name: regwatch
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${POSTGRES_DB:regwatch}
+    username: ${POSTGRES_USER:regwatch}
+    password: ${POSTGRES_PASSWORD:regwatch}
+  jpa:
+    open-in-view: false
+    hibernate:
+      # Le schéma appartient à Flyway ; Hibernate se contente de vérifier la cohérence des entités.
+      ddl-auto: validate
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      # Expose /health (et non /actuator/health) comme demandé par le critère du M1.
+      base-path: /
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+      # /health/liveness et /health/readiness, indépendants des services annexes.
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: readinessState,db
+
+regwatch:
+  llm:
+    # Ordre de fallback. Un fournisseur sans clé API est ignoré au démarrage.
+    chain: ${LLM_CHAIN:groq,gemini,ollama}
+    temperature: 0.0
+    providers:
+      groq:
+        type: openai-compatible
+        base-url: https://api.groq.com/openai
+        api-key: ${GROQ_API_KEY:}
+        model: ${GROQ_MODEL:llama-3.3-70b-versatile}
+        timeout: 60s
+      gemini:
+        type: openai-compatible
+        # Endpoint de compatibilité OpenAI de Google AI Studio (free tier, clé API simple).
+        base-url: https://generativelanguage.googleapis.com/v1beta/openai
+        completions-path: /chat/completions
+        api-key: ${GEMINI_API_KEY:}
+        model: ${GEMINI_MODEL:gemini-2.5-flash}
+        timeout: 60s
+      ollama:
+        type: ollama
+        base-url: ${OLLAMA_LLM_BASE_URL:http://localhost:11435}
+        model: ${OLLAMA_LLM_MODEL:qwen2.5:3b}
+        # Inférence CPU/petit GPU : bien plus lente que les API cloud.
+        timeout: 300s
+        max-attempts: 1
+  services:
+    embedding:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      model: ${EMBEDDING_MODEL:bge-m3}
+    reranker:
+      base-url: ${RERANKER_BASE_URL:http://localhost:8000}
