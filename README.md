@@ -61,6 +61,10 @@ curl -X POST http://localhost:8080/api/llm/test \
 
 La réponse indique quel fournisseur a répondu (`provider`, `model`), la latence et les tokens consommés.
 
+> `POST /api/llm/test` n'existe qu'en **profil `dev`** (`SPRING_PROFILES_ACTIVE=dev`, valeur de `.env.example`).
+> Sans ce profil, la route répond 404 : exposée publiquement, elle consommerait le quota des clés API.
+> `GET /api/llm/providers` reste disponible dans tous les profils (page d'état du frontend).
+
 ### LLM local (optionnel)
 
 Le fallback Ollama ne démarre qu'avec le profil `local-llm` (il demande environ 3 à 5 Go de RAM en plus) :
