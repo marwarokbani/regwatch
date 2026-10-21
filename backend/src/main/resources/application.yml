@@ -41,7 +41,7 @@ regwatch:
         type: openai-compatible
         base-url: https://api.groq.com/openai
         api-key: ${GROQ_API_KEY:}
-        model: ${GROQ_MODEL:llama-3.3-70b-versatile}
+        model: ${GROQ_MODEL:openai/gpt-oss-120b}
         timeout: 60s
       gemini:
         type: openai-compatible

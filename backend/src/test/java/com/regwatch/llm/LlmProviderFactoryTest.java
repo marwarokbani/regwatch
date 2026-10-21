@@ -24,7 +24,7 @@ class LlmProviderFactoryTest {
         List<LlmProvider> chain = factory.buildChain(props);
 
         assertThat(chain).extracting(LlmProvider::name).containsExactly("ollama", "groq");
-        assertThat(chain).extracting(LlmProvider::model).containsExactly("qwen2.5:3b", "llama-3.3-70b-versatile");
+        assertThat(chain).extracting(LlmProvider::model).containsExactly("qwen2.5:3b", "openai/gpt-oss-120b");
     }
 
     @Test
@@ -56,7 +56,7 @@ class LlmProviderFactoryTest {
         Duration timeout = Duration.ofSeconds(30);
         return new LlmProperties(chain, 0.0, Map.of(
                 "groq", new Provider(ProviderType.OPENAI_COMPATIBLE, "https://api.groq.com/openai", null,
-                        groqKey, "llama-3.3-70b-versatile", timeout, 2),
+                        groqKey, "openai/gpt-oss-120b", timeout, 2),
                 "gemini", new Provider(ProviderType.OPENAI_COMPATIBLE,
                         "https://generativelanguage.googleapis.com/v1beta/openai", "/chat/completions",
                         geminiKey, "gemini-2.5-flash", timeout, 2),
